@@ -3,6 +3,7 @@ package com.fil.springcontroller.controller;
 import com.fil.springcontroller.entity.Employee;
 import com.fil.springcontroller.exception.EmployeeNotFoundException;
 import com.fil.springcontroller.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createNewEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> createNewEmployee(@Valid @RequestBody Employee employee) {
         System.out.println("Creating new employee" + employee);
         Employee createdEmployee = employeeService.createEmployee(employee);
         return new ResponseEntity<>(createdEmployee,HttpStatus.CREATED);
