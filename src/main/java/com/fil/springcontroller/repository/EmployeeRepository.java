@@ -1,6 +1,7 @@
 package com.fil.springcontroller.repository;
 
 import com.fil.springcontroller.entity.Employee;
+import com.fil.springcontroller.exception.EmployeeNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -27,12 +28,12 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public Employee findById(long id) {
+    public Employee findById(long id){
         for (Employee employee : this.employees) {
             if (employee.getId() == id) {
                 return employee;
             }
         }
-        return null;
+        throw new EmployeeNotFoundException("Employee not found with id:" + id);
     }
 }
