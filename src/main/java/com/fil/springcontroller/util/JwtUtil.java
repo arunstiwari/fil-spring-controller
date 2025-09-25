@@ -16,12 +16,12 @@ public class JwtUtil {
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // Generate token
-    public String generateToken(String username, List<String> roles) {
+    public String generateToken(String username, List<String> roles, int minutes) {
         return Jwts.builder()
                 .claim("roles", roles)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * minutes)) // 1 hour
                 .signWith(key)
                 .compact();
     }
