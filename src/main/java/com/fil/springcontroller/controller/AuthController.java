@@ -1,5 +1,6 @@
 package com.fil.springcontroller.controller;
 
+import com.fil.springcontroller.service.AdminService;
 import com.fil.springcontroller.util.JwtUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +13,12 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
+    private final AdminService adminService;
     private JwtUtil jwtUtil;
 
-    public AuthController(JwtUtil jwtUtil) {
+    public AuthController(JwtUtil jwtUtil, AdminService adminService) {
         this.jwtUtil = jwtUtil;
+        this.adminService = adminService;
     }
 
     @PostMapping("/login")
@@ -39,6 +42,7 @@ public class AuthController {
 
     @GetMapping("/user")
     public String getUser(){
+        adminService.doSomeAdminAction();
         return "You can access it as you are either admin or regular user";
     }
 }
