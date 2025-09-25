@@ -16,34 +16,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter;
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                    .requestMatchers("/employees/**").authenticated()
-                    .requestMatchers("/hello/**", "/login").permitAll()
-                    .anyRequest().authenticated()
-            )
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user = User.withDefaultPasswordEncoder()
-//            .username("user")
-//            .password("password")
-//            .roles("USER")
-//            .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
-
 }

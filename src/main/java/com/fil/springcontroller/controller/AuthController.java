@@ -1,10 +1,12 @@
 package com.fil.springcontroller.controller;
 
 import com.fil.springcontroller.util.JwtUtil;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,8 +24,21 @@ public class AuthController {
         String password = user.get("password");
 
         if ("admin".equals(username) && "admin".equals(password)){
-            return jwtUtil.generateToken(username, Map.of("role", "USER_ROLE"));
+            return jwtUtil.generateToken(username, List.of("ROLE_ADMIN"));
+        }
+        if ("user".equals(username) && "user".equals(password)){
+            return jwtUtil.generateToken(username, List.of("ROLE_USER"));
         }
         throw new RuntimeException("Invalid Credentials");
+    }
+
+    @GetMapping("/admin")
+    public String getAdmin(){
+        return "You can access it as you are admin user";
+    }
+
+    @GetMapping("/user")
+    public String getUser(){
+        return "You can access it as you are either admin or regular user";
     }
 }
