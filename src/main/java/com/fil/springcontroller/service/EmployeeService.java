@@ -1,5 +1,6 @@
 package com.fil.springcontroller.service;
 
+import com.fil.springcontroller.aspect.annotation.LogExecutionTime;
 import com.fil.springcontroller.entity.Employee;
 import com.fil.springcontroller.repository.EmployeeRepository;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
@@ -15,6 +16,7 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
+     @LogExecutionTime
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
