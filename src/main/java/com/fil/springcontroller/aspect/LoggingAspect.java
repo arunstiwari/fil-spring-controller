@@ -22,6 +22,7 @@ public class LoggingAspect {
     @Around("serviceLayer() || annotatedWithLog()")
     public Object logAndTime(ProceedingJoinPoint pjp) throws Throwable {
         Signature sig = pjp.getSignature();
+        System.out.printf("Entering method %s with arguments %s", sig.toShortString(), pjp.getArgs());
         long start = System.currentTimeMillis();
         try {
             Object result = pjp.proceed();
@@ -29,6 +30,7 @@ public class LoggingAspect {
             System.out.printf("[AOP] %s executed in %d ms. Return: %s%n",
                     sig.toShortString(), duration,
                     (result != null ? result.toString() : "null"));
+            System.out.printf("Return value of method %s is %s", sig.toShortString(), result);
             return result;
         } catch (Throwable ex) {
             System.out.printf("[AOP] %s threw %s%n", sig.toShortString(), ex.toString());
